@@ -3,7 +3,7 @@
     <BaseCard>
       <header>
         <h3>{{ title }}</h3>
-        <BaseButton mode="flat">Delete</BaseButton>
+        <BaseButton @click="onClick(id)" mode="flat">Delete</BaseButton>
       </header>
       <p>{{ description }}</p>
       <nav>
@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  props: ['title', 'description', 'link'],
+  props: ['title', 'description', 'link', 'id', 'onClick'],
 };
 </script>
 

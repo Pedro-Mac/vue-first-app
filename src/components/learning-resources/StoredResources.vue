@@ -1,11 +1,13 @@
 <template>
   <ul>
     <LearningResource
-      v-for="resource in resources"
+      v-for="resource in resources.value"
       :key="resource.id"
       :title="resource.title"
       :description="resource.description"
       :link="resource.link"
+      :onClick="deleteResource"
+      :id="resource.id"
     >
     </LearningResource>
   </ul>
@@ -19,6 +21,12 @@ export default {
   },
 
   inject: ['resources'],
+
+  props: ['deleteResource'],
+
+  updated() {
+    console.log({ resources: this.resources });
+  },
 };
 </script>
 

@@ -18,6 +18,7 @@
       :is="currentComponent"
       :resources="storedResources"
       @add-resource="(newResource) => addResources(newResource)"
+      :deleteResource="deleteResource"
     ></component>
   </keep-alive>
 </template>
@@ -25,6 +26,7 @@
 <script>
 import StoredResources from './StoredResources.vue';
 import AddResource from './AddResource.vue';
+import { computed } from 'vue';
 export default {
   data() {
     return {
@@ -48,7 +50,7 @@ export default {
 
   provide() {
     return {
-      resources: this.storedResources,
+      resources: computed(() => this.storedResources),
     };
   },
 
@@ -70,6 +72,12 @@ export default {
 
     addResources(resource) {
       this.storedResources.push(resource);
+    },
+
+    deleteResource(id) {
+      this.storedResources = this.storedResources.filter(
+        (item) => item.id !== id
+      );
     },
   },
 };
