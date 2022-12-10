@@ -1,42 +1,82 @@
 <template>
-  <BaseCard>
-    <form @submit.prevent>
-      <div class="form-control">
-        <label for="title">Title</label>
-        <input id="title" type="text" v-model="title" />
-      </div>
-      <div class="form-control">
-        <label for="description">Description</label>
-        <textarea id="description" type="text" v-model="description" rows="3" />
-      </div>
-      <div class="form-control">
-        <label for="link">Link</label>
-        <input id="link" type="url" v-model="link" />
-      </div>
-      <div>
-        <BaseButton @click="addResource" type="submit">Add resource</BaseButton>
-      </div>
-    </form>
-  </BaseCard>
+  <div>
+    <BaseDialog
+      v-if="showDialog"
+      title="Invalid input"
+      @close="() => (showDialog = false)"
+    >
+      <template #default>
+        <p>You must fill in all the inputs</p>
+      </template>
+      <template #actions>
+        <BaseButton @click="() => (showDialog = false)">Ok</BaseButton>
+      </template>
+    </BaseDialog>
+
+    <BaseCard>
+      <form @submit.prevent>
+        <div class="form-control">
+          <label for="title">Title</label>
+          <input id="title" type="text" v-model="inputs.title" />
+        </div>
+        <div class="form-control">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            type="text"
+            v-model="inputs.description"
+            rows="3"
+          />
+        </div>
+        <div class="form-control">
+          <label for="link">Link</label>
+          <input id="link" type="url" v-model="inputs.link" />
+        </div>
+        <div>
+          <BaseButton @click="addResource" type="submit">
+            Add resource
+          </BaseButton>
+        </div>
+      </form>
+    </BaseCard>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      title: '',
-      description: '',
-      link: '',
+      inputs: {
+        title: '',
+        description: '',
+        link: '',
+      },
+      showDialog: false,
     };
   },
+  emits: ['addResource'],
   methods: {
     addResource() {
-      this.$emit('addResource', {
-        title: this.title,
-        description: this.description,
-        link: this.link,
-        id: this.title.toLowerCase().split(' ').join('-'),
-      });
+      if (
+        !(
+          this.inputs.title.trim() &&
+          this.inputs.description.trim() &&
+          this.inputs.link.trim()
+        )
+      ) {
+        this.showDialog = true;
+      } else {
+        this.$emit('addResource', {
+          title: this.inputs.title,
+          description: this.inputs.description,
+          link: this.inputs.link,
+          id: this.inputs.title.toLowerCase().split(' ').join('-'),
+        });
+
+        this.inputs.title = '';
+        this.inputs.description = '';
+        this.inputs.link = '';
+      }
     },
   },
 };

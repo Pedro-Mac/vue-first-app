@@ -13,11 +13,13 @@
       Add resource
     </BaseButton>
   </BaseCard>
-  <component
-    :is="currentComponent"
-    :resources="storedResources"
-    @add-resource="(newResource) => addResources(newResource)"
-  ></component>
+  <keep-alive>
+    <component
+      :is="currentComponent"
+      :resources="storedResources"
+      @add-resource="(newResource) => addResources(newResource)"
+    ></component>
+  </keep-alive>
 </template>
 
 <script>
